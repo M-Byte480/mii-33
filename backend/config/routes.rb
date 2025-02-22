@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get "/find", to: "meetings#find_slot"
   get "/chat", to: "chat#ask"
 
+  post "/users", to: "users#create"
+
   # Defines the root path route ("/")
   # root "posts#index"
 end
