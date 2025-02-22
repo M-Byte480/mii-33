@@ -1,5 +1,5 @@
-# app/controllers/sessions_controller.rb
-class SessionsController < ApplicationController
+# app/controllers/session_controller.rb
+class SessionController < ApplicationController
   # Skip authorization for this action since it’s the entry point
   skip_before_action :authorize_request, only: :google_auth
 
@@ -29,8 +29,8 @@ class SessionsController < ApplicationController
 
     # Optionally, generate your own JWT for further requests
     # (Assuming you have a JsonWebToken module set up)
-    app_token = JsonWebToken.encode(user_id: user.id)
+    # app_token = JsonWebToken.encode(user_id: user.id)
 
-    render json: { token: app_token, user: user }, status: :ok
+    render json: { user: user }, status: :ok
   end
 end
