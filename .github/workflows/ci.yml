@@ -9,7 +9,7 @@ jobs:
   scan_ruby:
     defaults:
       run:
-        working-directory: .backend/
+        working-directory: ./backend
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: backend/.ruby-version
+          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Scan for common Rails security vulnerabilities using static analysis
@@ -34,11 +34,11 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: backend/.ruby-version
+          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Lint code for consistent style
-        run: backend/bin/rubocop -f github
+        run: bin/rubocop -f github
 
   test:
     runs-on: ubuntu-latest
@@ -66,4 +66,4 @@ jobs:
         env:
           RAILS_ENV: test
           # REDIS_URL: redis://localhost:6379/0
-        run: backend/bin/rails db:test:prepare test
+        run: bin/rails db:test:prepare test
