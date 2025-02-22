@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   get "/chat", to: "chat#ask"
 
   post "/users", to: "users#create"
+  post "/auth/google", to: "sessions#google_auth"
+
+
 
   # Defines the root path route ("/")
   # root "posts#index"
