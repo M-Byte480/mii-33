@@ -7,12 +7,14 @@ class PublicCalendarService
     @service.key = "AIzaSyBUDWq5HyEvnxy0E-gWZwfC8nXmdFmrTqg"
   end
 
-  def list_events(max_results = 10)
+  def list_events(start_time, end_time, max_results = 10)
 
     response = @service.list_events(@calendar_id,
                                     max_results: max_results,
                                     single_events: true,
                                     order_by: 'startTime',
+                                    time_min: start_time,
+                                    time_max: end_time
                                     )
     puts response
     response.items.map do |event|

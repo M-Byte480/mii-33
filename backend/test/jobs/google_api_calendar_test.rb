@@ -12,7 +12,9 @@ class PublicCalendarServiceTest < ActiveSupport::TestCase
   end
 
   test 'should list events' do
-    events = @service.list_events
+    start_time = '2025-02-22T00:00:00Z'
+    end_time = '2025-02-22T23:00:00Z'
+    events = @service.list_events(start_time, end_time)
     assert_not_nil events
     Rails.logger.info(events)  # Log the events using Rails.logger
     puts events 
