@@ -136,6 +136,8 @@ GEM
       thor (>= 0.20, < 2.a)
     google-cloud-env (2.2.1)
       faraday (>= 1.0, < 3.a)
+    google-id-token (1.4.2)
+      jwt (>= 1)
     google-logging-utils (0.1.0)
     googleauth (1.13.1)
       faraday (>= 1.0, < 3.a)
@@ -391,6 +393,7 @@ DEPENDENCIES
   google-api-client
   dotenv
   google-apis-calendar_v3
+  google-id-token
   kamal
   puma (>= 5.0)
   rails (~> 8.0.1)
