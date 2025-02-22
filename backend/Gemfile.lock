@@ -382,7 +382,6 @@ PLATFORMS
   aarch64-linux-musl
   arm-linux-gnu
   arm-linux-musl
-  x86_64-linux
   x86_64-linux-gnu
   x86_64-linux-musl
 
@@ -392,6 +391,7 @@ DEPENDENCIES
   debug
   google-api-client
   dotenv
+  google-api-client
   google-apis-calendar_v3
   google-id-token
   kamal
