@@ -389,7 +389,6 @@ DEPENDENCIES
   bootsnap
   brakeman
   debug
-  google-api-client
   dotenv
   google-api-client
   google-apis-calendar_v3
