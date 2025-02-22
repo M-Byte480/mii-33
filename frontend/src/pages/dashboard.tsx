@@ -92,7 +92,7 @@ export function Graph() {
   const data = {
     labels: [ // Date Objects
       Utils.newDate(0),
-      Utils.newDate(1),
+        Utils.newDate(1),
       Utils.newDate(2),
       Utils.newDate(3),
       Utils.newDate(4),
