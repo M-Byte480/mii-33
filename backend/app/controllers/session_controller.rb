@@ -7,30 +7,26 @@ class SessionController < ApplicationController
     # Expect the Google JWT to be sent in the request body as { token: "..." }
     token = params[:token]
 
-    # Validate the token using google-id-token gem
-    validator = GoogleIDToken::Validator.new
-    begin
-      payload = validator.check(token, ENV["GOOGLE_CLIENT_ID"])
-    rescue GoogleIDToken::ValidationError => e
-      render json: { error: "Invalid token: #{e.message}" }, status: :unauthorized and return
+    user_info = get_user_info_from_google(token)
+
+    if user_info
+      user = User.find_or_create_by(email: user_info["email"]) do |u|
+        u.name = user_info["name"]
+      end
+
+      jwt = JsonWebToken.encode(user_id: user.id)
+      render json: { token: jwt }, status: :ok
+    else
+      render json: { error: "Invalid token" }, status: :unauthorized
     end
+  end
 
-    # Extract user info from the token payload
-    email      = payload["email"]
-    first_name = payload["given_name"] || ""
-    last_name  = payload["family_name"] || ""
+  private
 
-    # Find or create the user based on their email
-    user = User.find_or_create_by(email: email) do |u|
-      u.first_name = first_name
-      u.last_name  = last_name
-      # You might also assign other default attributes here
-    end
-
-    # Optionally, generate your own JWT for further requests
-    # (Assuming you have a JsonWebToken module set up)
-    # app_token = JsonWebToken.encode(user_id: user.id)
-
-    render json: { user: user }, status: :ok
+  def get_user_info_from_google(token)
+    response = Faraday.get("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=#{token}")
+    JSON.parse(response.body) if response.success?
+  rescue StandardError
+    nil
   end
 end

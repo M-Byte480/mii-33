@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   get "/find", to: "meetings#find_slot"
   get "/chat", to: "chat#ask"
+  get "/auth_test", to: "auth_test#test"
 
   post "/users", to: "users#create"
   post "/auth/google", to: "session#google_auth"
