@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   post "/users", to: "users#create"
   post "/auth/google", to: "session#google_auth"
 
+  resources :guests, only: [ :index, :show, :create, :update, :destroy ]
+
   # Defines the root path route ("/")
   # root "posts#index"
 end
