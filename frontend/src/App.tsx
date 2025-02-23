@@ -8,6 +8,23 @@ import { Calendar } from './pages/calendar';
 import { Dashboard } from './pages/dashboard';
 import { LoginPage } from './pages/login';
 
+export const setSessionItem = (key: string, value: any) => {
+  sessionStorage.setItem(key, JSON.stringify(value));
+};
+
+export const getSessionItem = (key: string) => {
+  const data = sessionStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+};
+
+export const removeSessionItem = (key: string) => {
+  sessionStorage.removeItem(key);
+};
+
+export const clearSession = () => {
+  sessionStorage.clear();
+};
+
 function App() {
   const calendarID = process.env.REACT_APP_CALENDAR_ID
   const apiKey = process.env.REACT_APP_GOOGLE_API_KEY

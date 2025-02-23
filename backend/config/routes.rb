@@ -7,11 +7,11 @@ Rails.application.routes.draw do
 
   get "/find", to: "meetings#find_slot"
   post "/chat", to: "chat#recommend"
+  get "/chat", to: "chat#ask"
+  get "/auth_test", to: "auth_test#test"
 
   post "/users", to: "users#create"
-  post "/auth/google", to: "sessions#google_auth"
-
-
+  post "/auth/google", to: "session#google_auth"
 
   # Defines the root path route ("/")
   # root "posts#index"

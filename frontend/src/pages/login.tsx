@@ -1,5 +1,6 @@
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { setSessionItem } from "../App";
 
 export function LoginPage() {
     const responseMessage = async (response: any) => {
@@ -8,6 +9,7 @@ export function LoginPage() {
         const idToken = response.credential;
 
         if (idToken) {
+            setSessionItem("jwt", idToken);
             try {
                 const backendResponse = await fetch("http://localhost:3001/auth/google", {
                     method: "POST",
