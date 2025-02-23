@@ -22,11 +22,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_060412) do
     t.index ["user_id"], name: "index_employees_on_user_id"
   end
 
-  create_table "schedules", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "first_name"
@@ -36,4 +31,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_060412) do
   end
 
   add_foreign_key "employees", "users"
+  add_foreign_key "schedules", "events"
 end

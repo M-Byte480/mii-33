@@ -1,18 +1,13 @@
+require_relative '../jobs/calculate_available_times.rb'
+require_relative '../jobs/get_times_available.rb'
+
 class MeetingsController < ApplicationController
-  def find_slot
-    final_availability = []
-    params["users"].each do |user|
-      # TODO
-      user_avail = []
-      user_avail.each_with_index do |busy, i|
-        if busy
-          final_availability[i] = busy
-        end
-      end
-    end
-
-    render json: params
+  def find_slots
+    params = JSON.parse(request.body.data)
+    timing = GetTimesAvailable.new
+    available_times_hash = timing.get_available_times(params["users"], params["start_time"], params["end_time"], params["duration"])
+    render json: timing.calculate_conflicts(params["users"], params["start_time"], params["end_time"], params["duration"], available_times_hash), status: :ok
   end
-
-  private
+  
+  
 end

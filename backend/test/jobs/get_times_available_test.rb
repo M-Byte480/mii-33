@@ -22,4 +22,35 @@ class GetTimesAvailableTest < ActiveSupport::TestCase
     Rails.logger.info(available_times)  # Log the available times using Rails.logger
     puts available_times  # Print the available times to the console
   end
+
+
+  test 'should get array of available times' do
+    start_time = '2025-02-22T14:45:00Z'
+    end_time = '2025-02-22T23:00:00Z'
+    ids = [@calendar_id]
+
+    available_times = @service.get_available_times(ids, start_time, end_time, 60)
+    
+    assert_not_nil available_times
+    assert available_times.is_a?(Hash)
+    assert available_times[@calendar_id].is_a?(Array)
+    Rails.logger.info(available_times)  # Log the available times using Rails.logger
+    puts available_times  # Print the available times to the console
+  end
+
+  test 'should calculate conflicts correctly' do
+    start_time = '2025-02-22T14:45:00Z'
+    end_time = '2025-02-22T23:00:00Z'
+    available_times_hash = {
+      'calendar1@gmail.com' => [true, false, true, true],
+      'calendar2@gmail.com' => [false, true, false, true],
+      'calendar3@gmail.com' => [true, true, true, false]
+    }
+
+    combined_available_times = @service.calculate_conflicts(available_times_hash, start_time, end_time)
+
+    assert_not_nil combined_available_times
+    assert combined_available_times.is_a?(Array)
+    assert_equal [], combined_available_times
+  end
 end
