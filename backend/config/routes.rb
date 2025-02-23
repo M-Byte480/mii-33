@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     resources :employee_feedbacks, only: [ :index, :show, :create, :update, :destroy ]
   end
 
+  resources :metrics, only: [ :index, :show, :create, :update, :destroy ]
+
   # Defines the root path route ("/")
   # root "posts#index"
 end
