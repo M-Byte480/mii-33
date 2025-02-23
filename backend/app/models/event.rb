@@ -5,6 +5,6 @@ class Event
   def initialize(start_time, end_time)
     @start_time = start_time
     @end_time = end_time
-    @duration = (end_time - start_time).to_i if start_time && end_time
+    @duration = (@end_time.to_time - @start_time.to_time)
   end
 end

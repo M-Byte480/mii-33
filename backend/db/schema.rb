@@ -18,7 +18,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_075651) do
     t.string "shorter"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index [ "employee_id" ], name: "index_employee_feedbacks_on_employee_id"
+    t.index ["employee_id"], name: "index_employee_feedbacks_on_employee_id"
   end
 
   create_table "employees", force: :cascade do |t|
@@ -29,12 +29,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_075651) do
     t.string "name"
     t.decimal "hourly_salary", precision: 10, scale: 2
     t.string "position"
-    t.index [ "user_id" ], name: "index_employees_on_user_id"
-  end
-
-  create_table "schedules", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_employees_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
