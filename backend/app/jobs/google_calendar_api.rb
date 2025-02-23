@@ -19,8 +19,6 @@ class PublicCalendarService
     puts response
     response.items.map do |event|
       {
-        id: event.id,
-        summary: event.summary,
         start_time: event.start&.date_time || event.start&.date,
         end_time: event.end&.date_time || event.end&.date
       }
