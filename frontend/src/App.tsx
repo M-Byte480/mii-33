@@ -57,9 +57,9 @@ function App() {
           <h1 className="text-xl font-bold">Mii-tings</h1>
           <div className="space-x-6 flex items-center">
             <Link to="/" className="hover:underline">Home</Link>
-            <Link to="/calendar" className="hover:underline">Calendar</Link>
-            <Link to="/dashboard" className="hover:underline">Dashboard</Link>
-            <Link to="/employees" className="hover:underline">Employees</Link>
+            {isLoggedIn && <Link to="/calendar" className="hover:underline">Calendar</Link>}
+            {isLoggedIn && <Link to="/dashboard" className="hover:underline">Dashboard</Link>}
+            {isLoggedIn && <Link to="/employees" className="hover:underline">Employees</Link>}
             {isLoggedIn && userEmail && (
               <span className="bg-gray-800 text-white px-3 py-1 rounded-full">
                 {truncateEmail(userEmail)}
