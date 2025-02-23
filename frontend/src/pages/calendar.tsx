@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 export function Calendar() {
     const [session, setSession] = useState<string | null>(null);
     useEffect(() => {
-        const sessionData  = getSessionItem("jwt");
+        const sessionData = getSessionItem("jwt");
         if (sessionData) {
             const decoded = jwtDecode(sessionData);
             // @ts-ignore
@@ -15,7 +15,7 @@ export function Calendar() {
             setSession(sessionCalendar);
         }
     }
-    , []);
+        , []);
 
     return (
         <>
@@ -29,9 +29,9 @@ export function Calendar() {
                 {session ? (
                     <section className="py-20 px-6 max-w-5xl mx-auto text-center">
                         <h2 className="text-3xl font-bold text-gray-800">Upcoming Events</h2>
-                        <div className="mt-10 bg-white p-6 rounded-lg shadow-md">
-                            <iframe src={ session }
-                                width="800" height="600"
+                        <div className="mt-10 bg-white p-6 rounded-lg shadow-md flex">
+                            <iframe src={session}
+                                className="flex-grow" height="600"
                                 scrolling="no"></iframe>
                         </div>
                     </section>
