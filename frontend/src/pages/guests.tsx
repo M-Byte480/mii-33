@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getSessionItem } from "../App";
 import {
     Container,
     TextField,
@@ -14,6 +13,7 @@ import {
     Box,
 } from "@mui/material";
 import { Edit, Delete, Save, Cancel } from "@mui/icons-material";
+import { getLocalStorageItem } from '../funcs/storage';
 
 interface Guest {
     id: number;
@@ -31,7 +31,7 @@ export function GuestsPage() {
     }, []);
 
     const fetchGuests = async () => {
-        const jwt = getSessionItem("jwt");
+        const jwt = getLocalStorageItem("mii-jwt");
         if (jwt) {
             try {
                 const response = await fetch("http://localhost:3001/guests", {
@@ -48,7 +48,7 @@ export function GuestsPage() {
     };
 
     const handleDelete = async (id: number) => {
-        const jwt = getSessionItem("jwt");
+        const jwt = getLocalStorageItem("mii-jwt");
         if (jwt) {
             try {
                 await fetch(`http://localhost:3001/guests/${id}`, {
@@ -65,7 +65,7 @@ export function GuestsPage() {
     };
 
     const handleUpdate = async (guest: Guest) => {
-        const jwt = getSessionItem("jwt");
+        const jwt = getLocalStorageItem("mii-jwt");
         if (jwt) {
             try {
                 await fetch(`http://localhost:3001/guests/${guest.id}`, {
@@ -85,7 +85,7 @@ export function GuestsPage() {
     };
 
     const handleCreate = async () => {
-        const jwt = getSessionItem("jwt");
+        const jwt = getLocalStorageItem("mii-jwt");
         if (jwt) {
             try {
                 await fetch("http://localhost:3001/guests", {

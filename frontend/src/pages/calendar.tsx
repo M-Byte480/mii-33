@@ -1,6 +1,6 @@
 import { Session } from "inspector";
 import { useEffect, useState } from "react";
-import { getSessionItem } from "../App";
+import { getSessionItem } from '../funcs/storage';
 import { jwtDecode } from "jwt-decode";
 import { addDays, format, startOfToday } from "date-fns";
 import Modal from 'react-modal';
@@ -75,8 +75,7 @@ export function Calendar() {
             <div className="min-h-screen bg-gray-100">
                 {/* Header */}
                 <header className="bg-blue-600 text-white py-20 text-center">
-                    <h1 className="text-4xl font-bold">Our Google Calendar</h1>
-                    <p className="mt-4 text-lg">Stay updated with our latest schedules and events.</p>
+                    <h1 className="text-4xl font-bold">Your Calendar</h1>
                 </header>
                 {/* Calendar Section */}
                 {session ? (
@@ -87,8 +86,7 @@ export function Calendar() {
                             <h2 className="text-3xl font-bold text-gray-800">Upcoming Events</h2>
                             <div className="mt-10 bg-white p-6 rounded-lg shadow-md flex">
                                 <iframe src={session}
-                                    className="flex-grow" height="600"
-                                    scrolling="no"></iframe>
+                                    className="flex-grow" height="600"></iframe>
                             </div>
                             <div className="flex flex-row items-center justify-center mt-10">
                                 <div className="flex flex-col space-y-4">

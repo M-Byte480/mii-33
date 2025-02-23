@@ -1,15 +1,30 @@
+import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { setSessionItem } from "../App";
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
+    Typography,
+} from "@mui/material";
+import { getLocalStorageItem } from '../funcs/storage';
+import { setLocalStorageItem } from '../funcs/storage';
 
-export function LoginPage() {
+interface LoginPageProps {
+    open: boolean;
+    onClose: () => void;
+}
+
+export function LoginPage({ open, onClose }: LoginPageProps) {
     const responseMessage = async (response: any) => {
         console.log("Success", response);
         
         const idToken = response.credential;
 
         if (idToken) {
-            setSessionItem("jwt", idToken);
+            setLocalStorageItem("jwt", idToken);
             try {
                 const backendResponse = await fetch("http://localhost:3001/auth/google", {
                     method: "POST",
@@ -20,8 +35,9 @@ export function LoginPage() {
                 });
 
                 const data = await backendResponse.json();
-                setSessionItem("jwt", data["token"])
+                setLocalStorageItem("mii-jwt", data["token"]);
                 console.log("Backend response:", data);
+                onClose();
             } catch (error) {
                 console.error("Error sending token to backend:", error);
             }
@@ -29,15 +45,25 @@ export function LoginPage() {
             console.error("ID token missing from response");
         }
     };
+
     const errorMessage = () => {
         console.log("An error occurred during login.");
     };
 
     return (
-        <>
-            <div className="flex justify-center items-center h-screen">
+        <Dialog open={open} onClose={onClose}>
+            <DialogTitle>Login</DialogTitle>
+            <DialogContent>
+                <Typography variant="body1" gutterBottom>
+                    Please log in using your Google account.
+                </Typography>
                 <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
-            </div>
-        </>
-    )
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose} color="primary">
+                    Cancel
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
 }
