@@ -6,7 +6,6 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemSecondaryAction,
     IconButton,
     Typography,
     Paper,
@@ -19,11 +18,13 @@ interface Employee {
     id: number;
     email: string;
     name: string;
+    hourly_salary: number;
+    position: string;
 }
 
 export function EmployeePage() {
     const [employees, setEmployees] = useState<Employee[]>([]);
-    const [newEmployee, setNewEmployee] = useState({ email: "", name: "" });
+    const [newEmployee, setNewEmployee] = useState({ email: "", name: "", hourly_salary: 0, position: "" });
     const [editEmployee, setEditEmployee] = useState<Employee | null>(null);
 
     useEffect(() => {
@@ -96,7 +97,7 @@ export function EmployeePage() {
                     },
                     body: JSON.stringify(newEmployee),
                 });
-                setNewEmployee({ email: "", name: "" });
+                setNewEmployee({ email: "", name: "", hourly_salary: 0, position: "" });
                 fetchEmployees();
             } catch (error) {
                 console.error("Error creating employee:", error);
@@ -125,6 +126,23 @@ export function EmployeePage() {
                             label="Name"
                             value={newEmployee.name}
                             onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })}
+                            className="mr-2"
+                            fullWidth
+                            margin="normal"
+                        />
+                        <TextField
+                            label="Hourly Salary"
+                            type="number"
+                            value={newEmployee.hourly_salary}
+                            onChange={(e) => setNewEmployee({ ...newEmployee, hourly_salary: parseFloat(e.target.value) })}
+                            className="mr-2"
+                            fullWidth
+                            margin="normal"
+                        />
+                        <TextField
+                            label="Position"
+                            value={newEmployee.position}
+                            onChange={(e) => setNewEmployee({ ...newEmployee, position: e.target.value })}
                             className="mr-2"
                             fullWidth
                             margin="normal"
@@ -164,6 +182,27 @@ export function EmployeePage() {
                                             fullWidth
                                             margin="normal"
                                         />
+                                        <TextField
+                                            label="Hourly Salary"
+                                            type="number"
+                                            value={editEmployee.hourly_salary}
+                                            onChange={(e) =>
+                                                setEditEmployee({ ...editEmployee, hourly_salary: parseFloat(e.target.value) })
+                                            }
+                                            className="mr-2"
+                                            fullWidth
+                                            margin="normal"
+                                        />
+                                        <TextField
+                                            label="Position"
+                                            value={editEmployee.position}
+                                            onChange={(e) =>
+                                                setEditEmployee({ ...editEmployee, position: e.target.value })
+                                            }
+                                            className="mr-2"
+                                            fullWidth
+                                            margin="normal"
+                                        />
                                         <IconButton onClick={() => handleUpdate(editEmployee)} color="primary">
                                             <Save />
                                         </IconButton>
@@ -173,15 +212,15 @@ export function EmployeePage() {
                                     </div>
                                 ) : (
                                     <div className="flex justify-between items-center w-full">
-                                        <ListItemText primary={`${employee.email} - ${employee.name}`} />
-                                        <ListItemSecondaryAction>
+                                        <ListItemText primary={`${employee.email} - ${employee.name} - ${employee.hourly_salary} - ${employee.position}`} />
+                                        <div className="flex space-x-2">
                                             <IconButton onClick={() => setEditEmployee(employee)} color="primary">
                                                 <Edit />
                                             </IconButton>
                                             <IconButton onClick={() => handleDelete(employee.id)} color="secondary">
                                                 <Delete />
                                             </IconButton>
-                                        </ListItemSecondaryAction>
+                                        </div>
                                     </div>
                                 )}
                             </ListItem>
