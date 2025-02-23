@@ -1,4 +1,4 @@
-class GuestsController < ApplicationController
+class EmployeesController < ApplicationController
   before_action :set_guest, only: [ :show, :update, :destroy ]
 
   def index
