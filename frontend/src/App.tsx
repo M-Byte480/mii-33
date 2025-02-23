@@ -5,7 +5,7 @@ import { Home } from './pages/home';
 import { Calendar } from './pages/calendar';
 import { Dashboard } from './pages/dashboard';
 import { LoginModal } from './pages/login';
-import { GuestsPage } from './pages/guests';
+import { EmployeePage } from './pages/employees';
 import { getLocalStorageItem, removeLocalStorageItem } from './funcs/storage';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 import { Button } from '@mui/material';
@@ -57,9 +57,9 @@ function App() {
           <h1 className="text-xl font-bold">Mii-tings</h1>
           <div className="space-x-6 flex items-center">
             <Link to="/" className="hover:underline">Home</Link>
-            <Link to="/calendar" className="hover:underline">Calendar</Link>
-            <Link to="/dashboard" className="hover:underline">Dashboard</Link>
-            <Link to="/guests" className="hover:underline">Guests</Link>
+            {isLoggedIn && <Link to="/calendar" className="hover:underline">Calendar</Link>}
+            {isLoggedIn && <Link to="/dashboard" className="hover:underline">Dashboard</Link>}
+            {isLoggedIn && <Link to="/employees" className="hover:underline">Employees</Link>}
             {isLoggedIn && userEmail && (
               <span className="bg-gray-800 text-white px-3 py-1 rounded-full">
                 {truncateEmail(userEmail)}
@@ -81,7 +81,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path='/guests' element={<GuestsPage />} />
+        <Route path='/employees' element={<EmployeePage />} />
       </Routes>
       <LoginModal open={isLoginOpen} onClose={handleLoginClose} />
     </BrowserRouter>

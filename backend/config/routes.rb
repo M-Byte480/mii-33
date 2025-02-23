@@ -6,13 +6,14 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   get "/find", to: "meetings#find_slot"
-  post "/chat", to: "chat#recommend"
+  post "/chat/recommend", to: "chat#recommend"
+  post "/chat/analysis", to: "chat#analysis"
   get "/auth_test", to: "auth_test#test"
 
   post "/users", to: "users#create"
   post "/auth/google", to: "session#google_auth"
 
-  resources :guests, only: [ :index, :show, :create, :update, :destroy ]
+  resources :employees, only: [:index, :show, :create, :update, :destroy]
 
   # Defines the root path route ("/")
   # root "posts#index"
