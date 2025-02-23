@@ -79,14 +79,15 @@ export function Calendar() {
                 </header>
                 {/* Calendar Section */}
                 {session ? (
-                    <>
-                        <button onClick={openModal}>Open Modal</button>
-
-                        <section className="py-20 px-6 max-w-5xl mx-auto text-center">
+                    <div className="container mx-auto ">
+                        <section className="py-20 px-6 mx-15 mx-auto text-center flex gap-10 justify-center">
+                            <div className="flex flex-col grow space-y-4">
                             <h2 className="text-3xl font-bold text-gray-800">Upcoming Events</h2>
+                            
                             <div className="mt-10 bg-white p-6 rounded-lg shadow-md flex">
                                 <iframe src={session}
                                     className="flex-grow" height="600"></iframe>
+                            </div>
                             </div>
                             <div className="flex flex-row items-center justify-center mt-10">
                                 <div className="flex flex-col space-y-4">
@@ -158,7 +159,7 @@ export function Calendar() {
                                 </div>
                             </div>
                         </section>
-                    </>
+                    </div>
                 ) : (
                     <></>
                 )}
