@@ -1,0 +1,20 @@
+{
+   "meeting_details": {
+     "current_meeting_time": "10:00",
+     "duration": 60
+   },
+   "participants": [
+     {
+       "role": "Manager",
+       "free_time": ["09:00", "10:00"],
+       "preferred_time_range": "09:30 - 12:00",
+       "hourly_rate": 100
+     },
+     {
+       "role": "Developer",
+       "free_time": ["10:00", "11:00"],
+       "preferred_time_range": "10:30 - 13:00",
+       "hourly_rate": 80
+     }
+   ]
+}

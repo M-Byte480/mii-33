@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   get "/find", to: "meetings#find_slot"
-  get "/chat", to: "chat#ask"
+  post "/chat", to: "chat#recommend"
   get "/auth_test", to: "auth_test#test"
 
   post "/users", to: "users#create"
