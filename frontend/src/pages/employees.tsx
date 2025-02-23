@@ -15,34 +15,34 @@ import {
 import { Edit, Delete, Save, Cancel } from "@mui/icons-material";
 import { getLocalStorageItem } from '../funcs/storage';
 
-interface Guest {
+interface Employee {
     id: number;
     email: string;
     name: string;
 }
 
-export function GuestsPage() {
-    const [guests, setGuests] = useState<Guest[]>([]);
-    const [newGuest, setNewGuest] = useState({ email: "", name: "" });
-    const [editGuest, setEditGuest] = useState<Guest | null>(null);
+export function EmployeePage() {
+    const [employees, setEmployees] = useState<Employee[]>([]);
+    const [newEmployee, setNewEmployee] = useState({ email: "", name: "" });
+    const [editEmployee, setEditEmployee] = useState<Employee | null>(null);
 
     useEffect(() => {
-        fetchGuests();
+        fetchEmployees();
     }, []);
 
-    const fetchGuests = async () => {
+    const fetchEmployees = async () => {
         const jwt = getLocalStorageItem("mii-jwt");
         if (jwt) {
             try {
-                const response = await fetch("http://localhost:3001/guests", {
+                const response = await fetch("http://localhost:3001/employees", {
                     headers: {
                         Authorization: `Bearer ${jwt}`,
                     },
                 });
                 const data = await response.json();
-                setGuests(data);
+                setEmployees(data);
             } catch (error) {
-                console.error("Error fetching guests:", error);
+                console.error("Error fetching employee:", error);
             }
         }
     };
@@ -51,35 +51,35 @@ export function GuestsPage() {
         const jwt = getLocalStorageItem("mii-jwt");
         if (jwt) {
             try {
-                await fetch(`http://localhost:3001/guests/${id}`, {
+                await fetch(`http://localhost:3001/employees/${id}`, {
                     method: "DELETE",
                     headers: {
                         Authorization: `Bearer ${jwt}`,
                     },
                 });
-                fetchGuests();
+                fetchEmployees();
             } catch (error) {
-                console.error("Error deleting guest:", error);
+                console.error("Error deleting employee:", error);
             }
         }
     };
 
-    const handleUpdate = async (guest: Guest) => {
+    const handleUpdate = async (employee: Employee) => {
         const jwt = getLocalStorageItem("mii-jwt");
         if (jwt) {
             try {
-                await fetch(`http://localhost:3001/guests/${guest.id}`, {
+                await fetch(`http://localhost:3001/employees/${employee.id}`, {
                     method: "PUT",
                     headers: {
                         Authorization: `Bearer ${jwt}`,
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(guest),
+                    body: JSON.stringify(employee),
                 });
-                setEditGuest(null);
-                fetchGuests();
+                setEditEmployee(null);
+                fetchEmployees();
             } catch (error) {
-                console.error("Error updating guest:", error);
+                console.error("Error updating employee:", error);
             }
         }
     };
@@ -88,18 +88,18 @@ export function GuestsPage() {
         const jwt = getLocalStorageItem("mii-jwt");
         if (jwt) {
             try {
-                await fetch("http://localhost:3001/guests", {
+                await fetch("http://localhost:3001/employees", {
                     method: "POST",
                     headers: {
                         Authorization: `Bearer ${jwt}`,
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(newGuest),
+                    body: JSON.stringify(newEmployee),
                 });
-                setNewGuest({ email: "", name: "" });
-                fetchGuests();
+                setNewEmployee({ email: "", name: "" });
+                fetchEmployees();
             } catch (error) {
-                console.error("Error creating guest:", error);
+                console.error("Error creating employee:", error);
             }
         }
     };
@@ -109,22 +109,22 @@ export function GuestsPage() {
             <div className="min-h-screen bg-gray-100">
                 {/* Header */}
                 <header className="bg-blue-600 text-white py-20 text-center">
-                    <h1 className="text-4xl font-bold">Your Guests</h1>
+                    <h1 className="text-4xl font-bold">Your Employees</h1>
                 </header>
                 <Container maxWidth="sm">
                     <Paper className="p-4 mt-4">
                         <TextField
                             label="Email"
-                            value={newGuest.email}
-                            onChange={(e) => setNewGuest({ ...newGuest, email: e.target.value })}
+                            value={newEmployee.email}
+                            onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })}
                             className="mr-2"
                             fullWidth
                             margin="normal"
                         />
                         <TextField
                             label="Name"
-                            value={newGuest.name}
-                            onChange={(e) => setNewGuest({ ...newGuest, name: e.target.value })}
+                            value={newEmployee.name}
+                            onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })}
                             className="mr-2"
                             fullWidth
                             margin="normal"
@@ -136,19 +136,19 @@ export function GuestsPage() {
                             className="mt-2"
                             fullWidth
                         >
-                            Add Guest
+                            Add Employee
                         </Button>
                     </Paper>
                     <List>
-                        {guests.map((guest) => (
-                            <ListItem key={guest.id} className="border p-4 rounded flex justify-between items-center">
-                                {editGuest && editGuest.id === guest.id ? (
+                        {employees.map((employee) => (
+                            <ListItem key={employee.id} className="border p-4 rounded flex justify-between items-center">
+                                {editEmployee && editEmployee.id === employee.id ? (
                                     <div className="flex space-x-2">
                                         <TextField
                                             label="Email"
-                                            value={editGuest.email}
+                                            value={editEmployee.email}
                                             onChange={(e) =>
-                                                setEditGuest({ ...editGuest, email: e.target.value })
+                                                setEditEmployee({ ...editEmployee, email: e.target.value })
                                             }
                                             className="mr-2"
                                             fullWidth
@@ -156,29 +156,29 @@ export function GuestsPage() {
                                         />
                                         <TextField
                                             label="Name"
-                                            value={editGuest.name}
+                                            value={editEmployee.name}
                                             onChange={(e) =>
-                                                setEditGuest({ ...editGuest, name: e.target.value })
+                                                setEditEmployee({ ...editEmployee, name: e.target.value })
                                             }
                                             className="mr-2"
                                             fullWidth
                                             margin="normal"
                                         />
-                                        <IconButton onClick={() => handleUpdate(editGuest)} color="primary">
+                                        <IconButton onClick={() => handleUpdate(editEmployee)} color="primary">
                                             <Save />
                                         </IconButton>
-                                        <IconButton onClick={() => setEditGuest(null)} color="default">
+                                        <IconButton onClick={() => setEditEmployee(null)} color="default">
                                             <Cancel />
                                         </IconButton>
                                     </div>
                                 ) : (
                                     <div className="flex justify-between items-center w-full">
-                                        <ListItemText primary={`${guest.email} - ${guest.name}`} />
+                                        <ListItemText primary={`${employee.email} - ${employee.name}`} />
                                         <ListItemSecondaryAction>
-                                            <IconButton onClick={() => setEditGuest(guest)} color="primary">
+                                            <IconButton onClick={() => setEditEmployee(employee)} color="primary">
                                                 <Edit />
                                             </IconButton>
-                                            <IconButton onClick={() => handleDelete(guest.id)} color="secondary">
+                                            <IconButton onClick={() => handleDelete(employee.id)} color="secondary">
                                                 <Delete />
                                             </IconButton>
                                         </ListItemSecondaryAction>

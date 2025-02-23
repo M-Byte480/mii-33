@@ -1,5 +1,5 @@
 class EmployeesController < ApplicationController
-  before_action :set_guest, only: [ :show, :update, :destroy ]
+  before_action :set_employee, only: [ :show, :update, :destroy ]
 
   def index
     @employees = current_user.employees
@@ -7,38 +7,38 @@ class EmployeesController < ApplicationController
   end
 
   def show
-    render json: @guest
+    render json: @employee
   end
 
   def create
-    @guest = current_user.employees.build(guest_params)
-    if @guest.save
-      render json: @guest, status: :created
+    @employee = current_user.employees.build(employee_params)
+    if @employee.save
+      render json: @employee, status: :created
     else
-      render json: @guest.errors, status: :unprocessable_entity
+      render json: @employee.errors, status: :unprocessable_entity
     end
   end
 
   def update
-    if @guest.update(guest_params)
-      render json: @guest
+    if @employee.update(employee_params)
+      render json: @employee
     else
-      render json: @guest.errors, status: :unprocessable_entity
+      render json: @employee.errors, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @guest.destroy
+    @employee.destroy
     head :no_content
   end
 
   private
 
-  def set_guest
-    @guest = current_user.employees.find(params[:id])
+  def set_employee
+    @employee = current_user.employees.find(params[:id])
   end
 
-  def guest_params
-    params.require(:guest).permit(:email, :name, :hourly_salary)
+  def employee_params
+    params.require(:employee).permit(:email, :name, :hourly_salary)
   end
 end
