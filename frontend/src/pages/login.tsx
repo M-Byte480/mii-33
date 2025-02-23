@@ -38,6 +38,7 @@ export function LoginModal({ open, onClose }: LoginPageProps) {
                 setLocalStorageItem("mii-jwt", data["token"]);
                 console.log("Backend response:", data);
                 onClose();
+                window.dispatchEvent(new Event('storage')); // Trigger storage event
             } catch (error) {
                 console.error("Error sending token to backend:", error);
             }
