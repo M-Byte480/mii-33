@@ -8,7 +8,6 @@ class GetTimesAvailable
         total_time = ((end_time - start_time)*24*60).to_i
         list = Array.new(total_time/15, false)
         event_index = 0
-        current_time = start_time
         index = 0
         while index < list.size
           duration_to_add = Rational(duration, 1440)
@@ -39,10 +38,10 @@ class GetTimesAvailable
       @service = PublicCalendarService.new(id)
       results = @service.list_events(start_time, end_time)
       events = []
-      results.map { |result| events << Event.new(result)}
+      results.map { |result| events << Event.new(result) }
       available_times_hash[id] = events
     end
 
     available_times_hash
-  end 
+  end
 end
