@@ -17,7 +17,7 @@ interface LoginPageProps {
     onClose: () => void;
 }
 
-export function LoginPage({ open, onClose }: LoginPageProps) {
+export function LoginModal({ open, onClose }: LoginPageProps) {
     const responseMessage = async (response: any) => {
         console.log("Success", response);
         

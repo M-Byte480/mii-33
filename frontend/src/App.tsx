@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Home } from './pages/home';
 import { Calendar } from './pages/calendar';
 import { Dashboard } from './pages/dashboard';
-import { LoginPage } from './pages/login';
+import { LoginModal } from './pages/login';
 import { GuestsPage } from './pages/guests';
 
 function App() {
@@ -43,7 +43,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path='/guests' element={<GuestsPage />} />
       </Routes>
-      <LoginPage open={isLoginOpen} onClose={handleLoginClose} />
+      <LoginModal open={isLoginOpen} onClose={handleLoginClose} />
     </BrowserRouter>
   );
 }
