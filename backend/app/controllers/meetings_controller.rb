@@ -26,11 +26,10 @@ class MeetingsController < ApplicationController
 
     # Create the event
     event = Google::Apis::CalendarV3::Event.new(
-      summary: params["name"],
+      summary: "HACKATHON",
       location: params["location"],
       start: { date_time: params["start_time"], time_zone: 'UTC' },
       end: { date_time: params["end_time"], time_zone: 'UTC' },
-      attendees: params["users"].map { |attendee| { email: attendee } }
     )
 
     # Create the event in the user's primary calendar
