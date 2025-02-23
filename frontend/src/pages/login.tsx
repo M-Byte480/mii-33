@@ -20,6 +20,7 @@ export function LoginPage() {
                 });
 
                 const data = await backendResponse.json();
+                setSessionItem("jwt", data["token"])
                 console.log("Backend response:", data);
             } catch (error) {
                 console.error("Error sending token to backend:", error);
