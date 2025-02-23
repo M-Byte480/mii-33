@@ -32,6 +32,11 @@ class MetricsController < ApplicationController
     head :no_content
   end
 
+  def get_metrics
+    @metrics = Metric.all
+    render json: @metrics
+  end
+
   private
 
   def set_metric

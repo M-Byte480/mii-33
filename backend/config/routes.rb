@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   post "/chat/recommend", to: "chat#recommend"
   post "/chat/analysis", to: "chat#analysis"
   get "/auth_test", to: "auth_test#test"
-
+  get "/metrics", to: "metrics#get_metrics"
   post "/users", to: "users#create"
   post "/auth/google", to: "session#google_auth"
 
