@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_23_075651) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_23_102205) do
   create_table "employee_feedbacks", force: :cascade do |t|
     t.integer "employee_id", null: false
     t.string "necessary"
@@ -32,6 +32,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_075651) do
     t.index ["user_id"], name: "index_employees_on_user_id"
   end
 
+  create_table "metrics", force: :cascade do |t|
+    t.decimal "total_meeting_hours"
+    t.decimal "total_cost"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "schedules", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "schedules", force: :cascade do |t|
+    t.integer "event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_schedules_on_event_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email"
     t.string "first_name"
@@ -42,4 +61,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_075651) do
 
   add_foreign_key "employee_feedbacks", "employees"
   add_foreign_key "employees", "users"
+  add_foreign_key "schedules", "events"
 end
