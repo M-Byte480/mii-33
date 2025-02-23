@@ -1,14 +1,72 @@
-import { Line } from "react-chartjs-2"
-import { Chart as ChartJS, TimeScale, LinearScale, PointElement, LineElement, Tooltip, Legend } from "chart.js";
-import "chartjs-adapter-date-fns";
-import Button from "@mui/material/Button";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, TimeScale, ChartOptions } from "chart.js";
+import 'chartjs-adapter-date-fns';
 import { CSSProperties, useEffect, useState } from "react";
-import { getLocalStorageItem } from "../funcs/storage";
+import Button from "@mui/material/Button";
 import { ClipLoader } from "react-spinners";
+import { getLocalStorageItem } from "../funcs/storage";
+
 // Register necessary Chart.js components
-ChartJS.register(TimeScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, TimeScale);
 
 export function Dashboard() {
+  const generateRandomData = () => {
+    return Array.from({ length: 7 }, (_, i) => ({
+      date: `2025-02-${20 + i}`,
+      hr: Math.floor(Math.random() * 50),
+      developers: Math.floor(Math.random() * 50),
+      managers: Math.floor(Math.random() * 50),
+    }));
+  };
+
+  const hardcodedData = generateRandomData();
+
+  const [data, setData] = useState<any>({
+    labels: hardcodedData.map((item) => item.date),
+    datasets: [
+      {
+        label: "HR",
+        data: hardcodedData.map((item) => item.hr),
+        backgroundColor: "rgba(255, 99, 132, 0.8)",
+      },
+      {
+        label: "Developers",
+        data: hardcodedData.map((item) => item.developers),
+        backgroundColor: "rgba(54, 162, 235, 0.8)",
+      },
+      {
+        label: "Managers",
+        data: hardcodedData.map((item) => item.managers),
+        backgroundColor: "rgba(75, 192, 192, 0.8)",
+      },
+    ],
+  });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [response, setResponse] = useState<string>("Analysis Result");
+  const handleClick = () => {
+    setLoading(true);
+    fetch("http://localhost:3001/chat/analysis", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + getLocalStorageItem("mii-jwt"),
+      },
+      body: JSON.stringify({
+        data: hardcodedData,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setResponse(data.analysis);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const parseResponse = (response: string) => {
+    return response.replaceAll("#", "").replaceAll("*", "").replace(/(?:\r\n|\r|\n)/g, "<br>");
+  };
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
@@ -16,150 +74,95 @@ export function Dashboard() {
         <h1 className="text-4xl font-bold">Dashboard</h1>
         <p className="mt-4 text-lg">Track your analytics and insights.</p>
       </header>
+      <Button onClick={handleClick}>Analyse</Button>
+      <p className="p4 border m-8" dangerouslySetInnerHTML={{ __html: parseResponse(response) }} />
 
       {/* Analytics Section */}
-      <Graph />
+      <div className="container mx-auto py-10 px-4 overflow-auto" style={{ maxHeight: '80vh' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Graph title="Hours in Meetings" />
+          <Graph title="Effectiveness of Meetings" />
+          <Graph title="Meetings That Could Have Been an Email" />
+          <Graph title="Total Cost of Meetings" />
+          <Graph title="Meeting Attendance" />
+          <Graph title="Meeting Satisfaction" />
+        </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export function Graph() {
-  const [response, setResponse] = useState<string>("Analysis Result");
-  const [apiResponse, setApiResponse] = useState<any>([]);
+interface GraphProps {
+  title: string;
+}
+
+export function Graph({ title }: GraphProps) {
   const [loading, setLoading] = useState<boolean>(false);
   let [color, setColor] = useState("#000000");
-  const [data, setData] = useState<any>({});
 
-  // let data = {
-  //   labels: [
-  //     "2024-02-01T00:00:00Z",
-  //     "2024-02-02T00:00:00Z",
-  //     "2024-02-03T00:00:00Z",
-  //     "2024-02-04T00:00:00Z",
-  //   ],
-  //   datasets: [
-  //     {
-  //       label: "Dataset",
-  //       data: [
-  //         { x: "2024-02-01T00:00:00Z", y: 10 },
-  //         { x: "2024-02-02T00:00:00Z", y: 30 },
-  //         { x: "2024-02-03T00:00:00Z", y: 20 },
-  //         { x: "2024-02-04T00:00:00Z", y: 50 },
-  //       ],
-  //       borderColor: "blue",
-  //       backgroundColor: "rgba(0, 0, 255, 0.5)",
-  //       tension: 0.4,
-  //     },
-  //   ],
-  // };
+  // Generate random data for demonstration
+  const generateRandomData = () => {
+    return Array.from({ length: 7 }, (_, i) => ({
+      date: `2025-02-${20 + i}`,
+      hr: Math.floor(Math.random() * 50),
+      developers: Math.floor(Math.random() * 50),
+      managers: Math.floor(Math.random() * 50),
+    }));
+  };
 
-  useEffect(() => {
-    fetch("http://localhost:3001/metrics", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + getLocalStorageItem("mii-jwt"),
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setApiResponse(data);
-      })
-      .catch((error) => console.error("Error fetching metrics:", error));
-  }, []);
+  const hardcodedData = generateRandomData();
 
-  useEffect(() => {
-    if (apiResponse.length === 0) return;
-
-    console.log("Update data", apiResponse);
-    let tmp = { labels: [], datasets: [] };
-    let labels: any[] = [];
-    let datasets = [
+  const [data, setData] = useState<any>({
+    labels: hardcodedData.map((item) => item.date),
+    datasets: [
       {
-        label: "Dataset",
-        data: [],
-        borderColor: "blue",
-        backgroundColor: "rgba(0, 0, 255, 0.5)",
-        tension: 0.4,
+        label: "HR",
+        data: hardcodedData.map((item) => item.hr),
+        backgroundColor: "rgba(255, 99, 132, 0.8)",
       },
       {
-        label: "Meeting Duration (min)",
-        data: [],
-        borderColor: "green",
-        backgroundColor: "rgba(0, 255, 0, 0.65)",
-        tension: 0.4,
+        label: "Developers",
+        data: hardcodedData.map((item) => item.developers),
+        backgroundColor: "rgba(54, 162, 235, 0.8)",
       },
       {
-        label: "Cost per minute",
-        data: [],
-        borderColor: "red",
-        backgroundColor: "rgba(255, 0, 0, 0.5)",
-        tension: 0.4,
+        label: "Managers",
+        data: hardcodedData.map((item) => item.managers),
+        backgroundColor: "rgba(75, 192, 192, 0.8)",
       },
-    ];
+    ],
+  });
 
-    apiResponse.forEach((element: any) => {
-      labels.push(element.id);
-      // @ts-ignore
-      datasets[0].data.push({ x: element.id, y: element.total_cost });
-      // @ts-ignore
-      datasets[1].data.push({ x: element.id, y: element.total_meeting_hours });
-      // @ts-ignore
-      datasets[2].data.push({ x: element.id, y: element.total_cost / element.total_meeting_hours });
-    });
-    // @ts-ignore
-    tmp.labels = labels;
-    // @ts-ignore
-    tmp.datasets = datasets;
-    setData(tmp);
-  }, [apiResponse]);
-
-  const options = {
+  const options: ChartOptions<'bar'> = {
     responsive: true,
     scales: {
       x: {
-        type: "linear",
+        stacked: true,
+        type: 'time',
+        time: {
+          unit: 'day',
+          tooltipFormat: 'MMM dd, yyyy',
+        },
         title: {
           display: true,
-          text: "Meeting ID",
-        },
-        ticks: {
-          stepSize: 1,
-          precision: 0,
+          text: "Date",
         },
       },
       y: {
+        stacked: true,
         title: {
           display: true,
-          text: "Cost of meeting in €",
+          text: "Value",
         },
       },
     },
-  };
-
-  const handleClick = () => {
-    setLoading(true);
-    fetch("http://localhost:3001/chat/analysis", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + getLocalStorageItem("mii-jwt")
+    plugins: {
+      legend: {
+        position: 'top' as const,
       },
-      body: JSON.stringify({
-        data: apiResponse
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setResponse(data.analysis);
-      }).finally(() => {
-        setLoading(false);
-      });;
-  }
-
-  const parseResponse = (response: string) => {
-    return response.replaceAll("#", "").replaceAll("*", "").replace(/(?:\r\n|\r|\n)/g, '<br>');
-  }
+      
+    },
+  };
 
   const override: CSSProperties = {
     display: "block",
@@ -168,32 +171,11 @@ export function Graph() {
   };
 
   return (
-    <>
-      <h2>Time Scale Graph (Chart.js 2)</h2>
-      <div className="flex flex-col justify-between">
-
-        <Button onClick={handleClick}>Analyse</Button>
-        {loading && (
-          <ClipLoader
-            color={color}
-            loading={loading}
-            cssOverride={override}
-            size={50}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        )}
-        <p className="p4 border m-8" dangerouslySetInnerHTML={{ __html: parseResponse(response) }} />
+    <div className="bg-white shadow-md rounded-lg p-4">
+      <h2 className="text-center text-lg font-bold">{title}</h2>
+      <div className="">
+        <Bar data={data} options={options} />
       </div>
-
-
-      {/* @ts-ignore */}
-      {
-        data.datasets && (
-          // @ts-ignore
-          <Line data={data} options={options} />
-        )
-      }
-    </>
-  )
+    </div>
+  );
 }
