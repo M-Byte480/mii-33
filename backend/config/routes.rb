@@ -13,7 +13,9 @@ Rails.application.routes.draw do
   post "/users", to: "users#create"
   post "/auth/google", to: "session#google_auth"
 
-  resources :employees, only: [:index, :show, :create, :update, :destroy]
+  resources :employees do
+    resources :employee_feedbacks, only: [ :index, :show, :create, :update, :destroy ]
+  end
 
   # Defines the root path route ("/")
   # root "posts#index"
