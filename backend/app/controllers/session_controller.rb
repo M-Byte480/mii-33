@@ -11,8 +11,12 @@ class SessionController < ApplicationController
 
     if user_info
       user = User.find_or_create_by(email: user_info["email"]) do |u|
-        u.name = user_info["name"]
+        u.first_name = user_info["given_name"]
+        u.last_name = user_info["family_name"]
       end
+
+      # Update the user's first_name and last_name if they already exist
+      user.update(first_name: user_info["given_name"], last_name: user_info["family_name"])
 
       jwt = JsonWebToken.encode(user_id: user.id)
       render json: { token: jwt }, status: :ok
