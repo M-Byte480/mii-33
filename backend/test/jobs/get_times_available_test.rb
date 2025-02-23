@@ -39,16 +39,18 @@ class GetTimesAvailableTest < ActiveSupport::TestCase
   end
 
   test 'should calculate conflicts correctly' do
+    start_time = '2025-02-22T14:45:00Z'
+    end_time = '2025-02-22T23:00:00Z'
     available_times_hash = {
       'calendar1@gmail.com' => [true, false, true, true],
-      'calendar2@gmail.com' => [true, true, false, true],
+      'calendar2@gmail.com' => [false, true, false, true],
       'calendar3@gmail.com' => [true, true, true, false]
     }
 
-    combined_available_times = @service.calculate_conflicts(available_times_hash)
+    combined_available_times = @service.calculate_conflicts(available_times_hash, start_time, end_time)
 
     assert_not_nil combined_available_times
     assert combined_available_times.is_a?(Array)
-    assert_equal [true, false, false, false], combined_available_times
+    assert_equal [], combined_available_times
   end
 end

@@ -42,7 +42,14 @@ class GetTimesAvailable
     available_times_hash
   end
 
-  def calculate_conflicts(available_times_hash)
-    available_times_hash.values.transpose.map { |times| times.all? }
+  def calculate_conflicts(available_times_hash, start_time,end_time)
+    start_time = DateTime.parse(start_time)
+      end_time = DateTime.parse(end_time)
+    bookable_times = available_times_hash.values.transpose.map { |times| times.all? }
+    bookable_times.map.with_index { |available, index|
+      time_slot_start = start_time + Rational(15 * index, 1440)
+      [time_slot_start, available]
+  }                  .select { |_, available| available }.map { |time, _| time }
+
   end
 end
