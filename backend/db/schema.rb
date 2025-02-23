@@ -35,18 +35,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_102205) do
   create_table "metrics", force: :cascade do |t|
     t.decimal "total_meeting_hours"
     t.decimal "total_cost"
-
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "schedules", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "schedules", force: :cascade do |t|
-    t.integer "event_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
