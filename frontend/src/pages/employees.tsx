@@ -11,8 +11,10 @@ import {
     Paper,
     Box,
     Alert,
+    Snackbar,
+    Popover,
 } from "@mui/material";
-import { Edit, Delete, Save, Cancel } from "@mui/icons-material";
+import { Edit, Delete, Save, Cancel, Link as LinkIcon } from "@mui/icons-material";
 import { getLocalStorageItem } from '../funcs/storage';
 
 interface Employee {
@@ -28,6 +30,8 @@ export function EmployeePage() {
     const [newEmployee, setNewEmployee] = useState({ email: "", name: "", hourly_salary: 0, position: "" });
     const [editEmployee, setEditEmployee] = useState<Employee | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [copySuccess, setCopySuccess] = useState<string | null>(null);
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
     useEffect(() => {
         fetchEmployees();
@@ -120,6 +124,23 @@ export function EmployeePage() {
             }
         }
     };
+
+    const handleCopyUrl = (id: number) => {
+        const url = `http://localhost:3000/feedback?employeeId=${id}`; // Replace with actual URL
+        navigator.clipboard.writeText(url).then(() => {
+            setCopySuccess("URL copied to clipboard");
+        });
+    };
+
+    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
 
     return (
         <>
@@ -231,6 +252,31 @@ export function EmployeePage() {
                                     <div className="flex justify-between items-center w-full">
                                         <ListItemText primary={`${employee.email} - ${employee.name} - €${employee.hourly_salary} - ${employee.position}`} />
                                         <div className="flex space-x-2">
+                                            <IconButton
+                                                onClick={() => handleCopyUrl(employee.id)}
+                                                color="primary"
+                                                onMouseEnter={handlePopoverOpen}
+                                                onMouseLeave={handlePopoverClose}
+                                            >
+                                                <LinkIcon />
+                                            </IconButton>
+                                            <Popover
+                                                sx={{ pointerEvents: 'none' }}
+                                                open={open}
+                                                anchorEl={anchorEl}
+                                                anchorOrigin={{
+                                                    vertical: 'bottom',
+                                                    horizontal: 'center',
+                                                }}
+                                                transformOrigin={{
+                                                    vertical: 'top',
+                                                    horizontal: 'center',
+                                                }}
+                                                onClose={handlePopoverClose}
+                                                disableRestoreFocus
+                                            >
+                                                <Typography sx={{ p: 1 }}>Share feedback form link</Typography>
+                                            </Popover>
                                             <IconButton onClick={() => setEditEmployee(employee)} color="primary">
                                                 <Edit />
                                             </IconButton>
@@ -244,6 +290,12 @@ export function EmployeePage() {
                         ))}
                     </List>
                 </Container>
+                <Snackbar
+                    open={!!copySuccess}
+                    autoHideDuration={3000}
+                    onClose={() => setCopySuccess(null)}
+                    message={copySuccess}
+                />
             </div>
         </>
     );
