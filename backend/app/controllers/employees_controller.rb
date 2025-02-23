@@ -2,8 +2,8 @@ class EmployeesController < ApplicationController
   before_action :set_guest, only: [ :show, :update, :destroy ]
 
   def index
-    @guests = current_user.guests
-    render json: @guests
+    @employees = current_user.employees
+    render json: @employees
   end
 
   def show
@@ -11,7 +11,7 @@ class EmployeesController < ApplicationController
   end
 
   def create
-    @guest = current_user.guests.build(guest_params)
+    @guest = current_user.employees.build(guest_params)
     if @guest.save
       render json: @guest, status: :created
     else
@@ -35,7 +35,7 @@ class EmployeesController < ApplicationController
   private
 
   def set_guest
-    @guest = current_user.guests.find(params[:id])
+    @guest = current_user.employees.find(params[:id])
   end
 
   def guest_params
