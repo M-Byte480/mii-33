@@ -10,6 +10,7 @@ import {
     Typography,
     Paper,
     Box,
+    Alert,
 } from "@mui/material";
 import { Edit, Delete, Save, Cancel } from "@mui/icons-material";
 import { getLocalStorageItem } from '../funcs/storage';
@@ -26,6 +27,7 @@ export function EmployeePage() {
     const [employees, setEmployees] = useState<Employee[]>([]);
     const [newEmployee, setNewEmployee] = useState({ email: "", name: "", hourly_salary: 0, position: "" });
     const [editEmployee, setEditEmployee] = useState<Employee | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchEmployees();
@@ -66,6 +68,11 @@ export function EmployeePage() {
     };
 
     const handleUpdate = async (employee: Employee) => {
+        if (!employee.email || !employee.name || employee.hourly_salary <= 0 || !employee.position) {
+            setError("Please fill out all fields correctly.");
+            return;
+        }
+
         const jwt = getLocalStorageItem("mii-jwt");
         if (jwt) {
             try {
@@ -79,13 +86,20 @@ export function EmployeePage() {
                 });
                 setEditEmployee(null);
                 fetchEmployees();
+                setError(null);
             } catch (error) {
                 console.error("Error updating employee:", error);
+                setError("Error updating employee. Please try again.");
             }
         }
     };
 
     const handleCreate = async () => {
+        if (!newEmployee.email || !newEmployee.name || newEmployee.hourly_salary <= 0 || !newEmployee.position) {
+            setError("Please fill out all fields correctly.");
+            return;
+        }
+
         const jwt = getLocalStorageItem("mii-jwt");
         if (jwt) {
             try {
@@ -99,8 +113,10 @@ export function EmployeePage() {
                 });
                 setNewEmployee({ email: "", name: "", hourly_salary: 0, position: "" });
                 fetchEmployees();
+                setError(null);
             } catch (error) {
                 console.error("Error creating employee:", error);
+                setError("Error creating employee. Please try again.");
             }
         }
     };
@@ -114,6 +130,7 @@ export function EmployeePage() {
                 </header>
                 <Container maxWidth="md">
                     <Paper className="p-4 mt-4">
+                        {error && <Alert severity="error">{error}</Alert>}
                         <TextField
                             label="Email"
                             value={newEmployee.email}
