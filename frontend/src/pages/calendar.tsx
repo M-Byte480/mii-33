@@ -1,6 +1,6 @@
 import { Session } from "inspector";
 import { useEffect, useState } from "react";
-import { getSessionItem } from '../funcs/storage';
+import { getLocalStorageItem } from '../funcs/storage';
 import { jwtDecode } from "jwt-decode";
 import { addDays, format, startOfToday } from "date-fns";
 import Modal from 'react-modal';
@@ -40,7 +40,7 @@ export function Calendar() {
     }
 
     useEffect(() => {
-        const sessionData = getSessionItem("jwt");
+        const sessionData = getLocalStorageItem("jwt");
         if (sessionData) {
             const decoded = jwtDecode(sessionData);
             // @ts-ignore
