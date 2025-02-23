@@ -58,7 +58,7 @@ class ChatService
       prompt = <<~PROMPT
       You are an expert scheduling analyst for a high-performance calendar application. You have been given a **JSON payload** containing:  
       - **Meeting details** (time, duration, topic)  
-      - **Participants** (role, availability, preferred time slots, hourly rate)  
+      - **Participants** (role, hourly rate)  
       - **Performance metrics** (meeting cost, interruptions, effectiveness score, etc.)  
 
       ### **Your Task:**  
