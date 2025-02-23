@@ -6,6 +6,7 @@ class MeetingsController < ApplicationController
     puts params
     timing = GetTimesAvailable.new
     available_times_hash = timing.get_available_times(params["users"], params["start_time"], params["end_time"], params["duration"])
+    puts available_times_hash
     render json: timing.calculate_conflicts(available_times_hash, params["start_time"], params["end_time"]), status: :ok
   end
 
@@ -28,7 +29,8 @@ class MeetingsController < ApplicationController
       summary: params["name"],
       location: params["location"],
       start: { date_time: params["start_time"], time_zone: 'UTC' },
-      end: { date_time: params["end_time"], time_zone: 'UTC' }
+      end: { date_time: params["end_time"], time_zone: 'UTC' },
+      attendees: params["users"].map { |attendee| { email: attendee } }
     )
 
     # Create the event in the user's primary calendar

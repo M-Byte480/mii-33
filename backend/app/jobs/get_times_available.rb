@@ -3,6 +3,7 @@ require_relative 'google_calendar_api'
 class GetTimesAvailable
   def get_available_times(ids, start_time, end_time, duration)
       available_times_hash = get_events_for_ids(ids, start_time, end_time)
+      puts available_times_hash
       formatted_calendar = {}
       start_time = DateTime.parse(start_time)
       end_time = DateTime.parse(end_time)
@@ -15,7 +16,7 @@ class GetTimesAvailable
           duration_to_add = Rational(duration, 1440)
           slot_start_time = start_time + Rational(15 * index, 1440)
           slot_end_time = slot_start_time + duration_to_add
-          if event_index < events.size && slot_end_time <= events[event_index].start_time 
+          if event_index >= events.size || slot_end_time <= events[event_index].start_time 
             list[index] = true
             index += 1
           elsif event_index < events.size 

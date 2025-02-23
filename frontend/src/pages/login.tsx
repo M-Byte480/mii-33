@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 import {
     Dialog,
     DialogTitle,
@@ -19,6 +20,9 @@ interface LoginPageProps {
 
 export function LoginModal({ open, onClose }: LoginPageProps) {
     
+    const navigate = useNavigate();
+
+
     const responseMessage = async (response: any) => {
         console.log("Success", response);
         
@@ -40,6 +44,7 @@ export function LoginModal({ open, onClose }: LoginPageProps) {
                 console.log("Backend response:", data);
                 onClose();
                 window.dispatchEvent(new Event('storage')); // Trigger storage event
+                navigate("/calendar"); // Navigate to /calendar
             } catch (error) {
                 console.error("Error sending token to backend:", error);
             }
