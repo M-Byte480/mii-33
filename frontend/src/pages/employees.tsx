@@ -112,7 +112,7 @@ export function EmployeePage() {
                 <header className="bg-blue-600 text-white py-20 text-center">
                     <h1 className="text-4xl font-bold">Your Employees</h1>
                 </header>
-                <Container maxWidth="sm">
+                <Container maxWidth="md">
                     <Paper className="p-4 mt-4">
                         <TextField
                             label="Email"
@@ -212,7 +212,7 @@ export function EmployeePage() {
                                     </div>
                                 ) : (
                                     <div className="flex justify-between items-center w-full">
-                                        <ListItemText primary={`${employee.email} - ${employee.name} - ${employee.hourly_salary} - ${employee.position}`} />
+                                        <ListItemText primary={`${employee.email} - ${employee.name} - €${employee.hourly_salary} - ${employee.position}`} />
                                         <div className="flex space-x-2">
                                             <IconButton onClick={() => setEditEmployee(employee)} color="primary">
                                                 <Edit />

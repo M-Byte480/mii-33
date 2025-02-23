@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_23_053414) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_23_060412) do
   create_table "employees", force: :cascade do |t|
     t.string "email", null: false
     t.integer "user_id", null: false
@@ -18,6 +18,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_23_053414) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.decimal "hourly_salary", precision: 10, scale: 2
+    t.string "position"
     t.index ["user_id"], name: "index_employees_on_user_id"
   end
 

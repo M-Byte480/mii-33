@@ -9,6 +9,7 @@ import { EmployeePage } from './pages/employees';
 import { getLocalStorageItem, removeLocalStorageItem } from './funcs/storage';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 import { Button } from '@mui/material';
+import { FeedbackPage } from './pages/feedback';
 
 function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -82,6 +83,7 @@ function App() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path='/employees' element={<EmployeePage />} />
+        <Route path='/feedback' element={<FeedbackPage />} />
       </Routes>
       <LoginModal open={isLoginOpen} onClose={handleLoginClose} />
     </BrowserRouter>
