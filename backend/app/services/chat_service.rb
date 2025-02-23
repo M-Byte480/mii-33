@@ -57,9 +57,11 @@ class ChatService
 
       prompt = <<~PROMPT
       You are an expert scheduling analyst for a high-performance calendar application. You have been given a **JSON payload** containing:  
-      - **Meeting details** (time, duration, topic)  
+      - **Meeting details** (duration)  
       - **Participants** (role, hourly rate)  
-      - **Performance metrics** (meeting cost, interruptions, effectiveness score, etc.)  
+      - **Performance metrics** (meeting cost, flow state interruption, effectiveness score, etc.)
+      - **Do not include markdown or JSON in your response.**
+      - **Keep it business oriented** and **concise**.
 
       ### **Your Task:**  
       Perform a **deep analysis** focusing on two key areas:  
@@ -73,21 +75,26 @@ class ChatService
         - Identify scheduling conflicts with participant availability and preferred time slots.  
         - Suggest a better time if the current slot is inefficient.  
 
-      ### **Example Metrics to Include:**  
-      - **Total Meeting Cost:** $X (sum of participant costs)  
+      ### **Sample return format:**  
+      - **Total Meeting Cost:** $X (sum of participant costs) 
+      - **Cost spent on developer:** $X
+      - **Cost spent on manager:** $X 
+      - (and for any other role)
       - **Flow Time Interruptions:** X disruptions  
       - **Effectiveness Score:** X/1 (e.g., 0.75 = 75%)  
       - **Preferred Time Match:** X% of participants are happy with this time  
 
-      ### **Final Output:**  
-      -Provide a **concise recommendation** on whether the meeting should be rescheduled. If so, suggest a new time that **minimizes cost and disruptions** while maximizing effectiveness. Your reasoning should be clear and data-driven—**easy enough for a child to understand.**  
-      -Make sure its as short as possible, hitting all the necessary points.
-      -Cost, percentage and other valuable info. No pointless stretching of answer.
-      -No point in adding how you did things. Just show.
+
 
       **JSON Payload:**  
       #{json_payload}
     PROMPT
+
+      # ### **Final Output:**  
+      # -Provide a **concise recommendation** on what to mitigate.  
+      # -Make sure its as short as possible, hitting all the necessary points.
+      # -Cost, percentage and other valuable info. No pointless stretching of answer.
+      # -No point in adding how you did things. Just show.
 
     ask_question(prompt)
     end
