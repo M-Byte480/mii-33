@@ -37,6 +37,7 @@ class MetricsController < ApplicationController
     render json: @metrics
   end
 
+
   private
 
   def set_metric
